@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', init);
 
 const runJSSlider = function() {
     const imagesSelector = '.gallery__item';
-    const sliderRootSelector = '.js-slider'; 
+    const sliderRootSelector = '.js-slider';
 
     const imagesList = document.querySelectorAll(imagesSelector);
     const sliderRootElement = document.querySelector(sliderRootSelector);
@@ -25,26 +25,39 @@ const initEvents = function(imagesList, sliderRootElement) {
         item.addEventListener('click', function(e) {
             fireCustomEvent(e.currentTarget, 'js-slider-img-click');
         });
-        
+
     });
 
-    // todo: 
+    // todo:
     // utwórz nasłuchiwanie eventu o nazwie [click], który ma uruchomić event [js-slider-img-next]
     // na elemencie [.js-slider__nav--next]
     const navNext = sliderRootElement.querySelector('.js-slider__nav--next');
-    
+
+    navNext.addEventListener('click' , function(e) {
+        fireCustomEvent(e.target , 'js-slider-img-next');
+    })
+
 
     // todo:
     // utwórz nasłuchiwanie eventu o nazwie [click], który ma uruchomić event [js-slider-img-prev]
     // na elemencie [.js-slider__nav--prev]
     const navPrev = sliderRootElement.querySelector('.js-slider__nav--prev');
-    
+
+    navPrev.addEventListener('click' , function(e) {
+        fireCustomEvent(e.target , 'js-slider-img-prev')
+    })
+
+
 
     // todo:
     // utwórz nasłuchiwanie eventu o nazwie [click], który ma uruchomić event [js-slider-close]
     // tylko wtedy, gdy użytkownik kliknie w [.js-slider__zoom]
     const zoom = sliderRootElement.querySelector('.js-slider__zoom');
-    
+
+    zoom.addEventListener('click' , function(e) {
+        fireCustomEvent(e.target , 'js-slider-close')
+    })
+
 }
 
 const fireCustomEvent = function(element, name) {
@@ -56,6 +69,11 @@ const fireCustomEvent = function(element, name) {
 
     element.dispatchEvent( event );
 }
+
+
+
+
+
 
 const initCustomEvents = function(imagesList, sliderRootElement, imagesSelector) {
     imagesList.forEach(function(img) {
@@ -70,20 +88,26 @@ const initCustomEvents = function(imagesList, sliderRootElement, imagesSelector)
 }
 
 const onImageClick = function(event, sliderRootElement, imagesSelector) {
-    // todo:  
+    // todo:
     // 1. dodać klasę [.js-slider--active], aby pokazać całą sekcję
     // 2. wyszukać ściężkę (atrybut [src]) do klikniętego elementu i wstawić do [.js-slider__image]
     // 3. pobrać nazwę grupy zapisaną w dataset klikniętego elementu
     // 4. wyszukać wszystkie zdjęcia należące do danej grupy, które wykorzystasz do osadzenia w dolnym pasku
     // 5. utworzyć na podstawie elementu [.js-slider__thumbs-item--prototype] zawartość dla [.js-slider__thumbs]
     // 6. zaznaczyć przy pomocy klasy [.js-slider__thumbs-image--current], który element jest aktualnie wyświetlany
-    
+
+    sliderRootElement.classList.add('js-slider--active');
+    const src = event.target.children[0].getAttribute('src');
+    sliderRootElement.firstElementChild.lastElementChild.firstElementChild.setAttribute('src' , src)
+
+    console.log(sliderRootElement.firstElementChild.lastElementChild.firstElementChild)
+
 }
 
 const onImageNext = function(event) {
     console.log(this, 'onImageNext');
     // [this] wskazuje na element [.js-slider]
-    
+
     // todo:
     // 1. wyszukać aktualny wyświetlany element przy pomocy [.js-slider__thumbs-image--current]
     // 2. znaleźć element następny do wyświetlenie względem drzewa DOM dla [.js-slider__thumbs]
@@ -95,7 +119,7 @@ const onImageNext = function(event) {
 const onImagePrev = function(event) {
     console.log(this, 'onImagePrev');
     // [this] wskazuje na element [.js-slider]
-    
+
     // todo:
     // 1. wyszukać aktualny wyświetlany element przy pomocy [.js-slider__thumbs-image--current]
     // 2. znaleźć element poprzedni do wyświetlenie względem drzewa DOM dla [.js-slider__thumbs]
