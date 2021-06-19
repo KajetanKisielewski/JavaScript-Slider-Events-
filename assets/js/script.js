@@ -35,6 +35,7 @@ const initEvents = function(imagesList, sliderRootElement) {
 
     navNext.addEventListener('click' , function(e) {
         fireCustomEvent(e.target , 'js-slider-img-next');
+        e.stopPropagation();
     })
 
 
@@ -44,9 +45,9 @@ const initEvents = function(imagesList, sliderRootElement) {
     const navPrev = sliderRootElement.querySelector('.js-slider__nav--prev');
 
     navPrev.addEventListener('click' , function(e) {
-        fireCustomEvent(e.target , 'js-slider-img-prev')
+        fireCustomEvent(e.target , 'js-slider-img-prev');
+        e.stopPropagation();
     })
-
 
 
     // todo:
@@ -55,10 +56,13 @@ const initEvents = function(imagesList, sliderRootElement) {
     const zoom = sliderRootElement.querySelector('.js-slider__zoom');
 
     zoom.addEventListener('click' , function(e) {
-        fireCustomEvent(e.target , 'js-slider-close')
+        if(e.target === e.currentTarget) {
+            fireCustomEvent(e.target , 'js-slider-close');
+        }
     })
 
 }
+
 
 const fireCustomEvent = function(element, name) {
     console.log(element.className, '=>', name);
@@ -69,10 +73,6 @@ const fireCustomEvent = function(element, name) {
 
     element.dispatchEvent( event );
 }
-
-
-
-
 
 
 const initCustomEvents = function(imagesList, sliderRootElement, imagesSelector) {
@@ -87,6 +87,7 @@ const initCustomEvents = function(imagesList, sliderRootElement, imagesSelector)
     sliderRootElement.addEventListener('js-slider-close', onClose);
 }
 
+
 const onImageClick = function(event, sliderRootElement, imagesSelector) {
     // todo:
     // 1. dodać klasę [.js-slider--active], aby pokazać całą sekcję
@@ -96,13 +97,24 @@ const onImageClick = function(event, sliderRootElement, imagesSelector) {
     // 5. utworzyć na podstawie elementu [.js-slider__thumbs-item--prototype] zawartość dla [.js-slider__thumbs]
     // 6. zaznaczyć przy pomocy klasy [.js-slider__thumbs-image--current], który element jest aktualnie wyświetlany
 
+
     sliderRootElement.classList.add('js-slider--active');
+
     const src = event.target.children[0].getAttribute('src');
-    sliderRootElement.firstElementChild.lastElementChild.firstElementChild.setAttribute('src' , src)
+    sliderRootElement.querySelector('img').setAttribute('src' , src);
 
-    console.log(sliderRootElement.firstElementChild.lastElementChild.firstElementChild)
+    const groupName = event.target.dataset.sliderGroupName;
+    const identicalGroupName = document.querySelectorAll( imagesSelector + '[data-slider-group-name=' + groupName +']' );
 
+    const sliderThumb = document.querySelector('.js-slider__thumbs');
+
+    for(let i=0; i<identicalGroupName.length; i++) {
+        sliderThumb.appendChild(identicalGroupName[i]);
+    }
+
+    sliderRootElement.querySelector('img').classList.add('js-slider__thumbs-image--current');
 }
+
 
 const onImageNext = function(event) {
     console.log(this, 'onImageNext');
@@ -114,6 +126,26 @@ const onImageNext = function(event) {
     // 3. sprawdzić czy ten element istnieje - jeśli nie to [.nextElementSibling] zwróci [null]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut o nazwie [src] dla [.js-slider__image]
+
+    const currentElement = document.querySelector('.js-slider__thumbs-image--current');
+
+    const currentElementSrc = currentElement.getAttribute('src')
+    const sliderThumb = document.querySelector('.js-slider__thumbs');
+    const sliderThumbImgList = sliderThumb.querySelectorAll(`img`);
+
+    sliderThumbImgList.forEach( function(el) {
+        if(el.getAttribute('src') === currentElementSrc) {
+            const currentElementInThumb = el;
+            const nextElement = currentElementInThumb.parentElement.nextElementSibling;
+            const nextElementImg = nextElement.querySelector('img');
+            const nextElementImgSrc = nextElementImg.getAttribute('src')
+
+            if(nextElement !== 'null') {
+                const mainImg = document.querySelector('.js-slider__image')
+                mainImg.setAttribute('src' , nextElementImgSrc);
+            }
+       }
+   })
 }
 
 const onImagePrev = function(event) {
@@ -126,10 +158,42 @@ const onImagePrev = function(event) {
     // 3. sprawdzić czy ten element istnieje i czy nie posiada klasy [.js-slider__thumbs-item--prototype]
     // 4. przełączyć klasę [.js-slider__thumbs-image--current] do odpowiedniego elementu
     // 5. podmienić atrybut [src] dla [.js-slider__image]
+
+    const currentElement = document.querySelector('.js-slider__thumbs-image--current');
+
+    const currentElementSrc = currentElement.getAttribute('src')
+    const sliderThumb = document.querySelector('.js-slider__thumbs');
+    const sliderThumbImgList = sliderThumb.querySelectorAll(`img`);
+
+    sliderThumbImgList.forEach( function(el) {
+        if(el.getAttribute('src') === currentElementSrc) {
+            const currentElementInThumb = el;
+            const previousElement = currentElementInThumb.parentElement.previousElementSibling;
+            const previousElementImg = previousElement.querySelector('img');
+            const previousElementImgSrc = previousElementImg.getAttribute('src')
+
+            if( previousElement !== 'null' && !previousElement.classList.contains('js-slider__thumbs-item--prototype') ) {
+                const mainImg = document.querySelector('.js-slider__image')
+                mainImg.setAttribute('src' , previousElementImgSrc);
+            }
+       }
+   })
 }
 
 const onClose = function(event) {
+    console.log(this, 'onClose')
     // todo:
     // 1. należy usunać klasę [js-slider--active] dla [.js-slider]
     // 2. należy usunać wszystkie dzieci dla [.js-slider__thumbs] pomijając [.js-slider__thumbs-item--prototype]
+
+    document.querySelector('.js-slider--active').classList.remove('js-slider--active');
+    const children = document.querySelector('.js-slider__thumbs').children;
+    const arr = Array.from(children);
+    console.log(children);
+
+    arr.forEach( function(el) {
+        if( !el.classList.contains('js-slider__thumbs-item--prototype') ) {
+            document.querySelector('.js-slider__thumbs').removeChild(el);
+        }
+    } )
 }
