@@ -139,15 +139,22 @@ const onImageNext = function(event) {
         if(el.getAttribute('src') === currentElementSrc) {
             const currentElementInThumb = el;
             const nextElement = currentElementInThumb.parentElement.nextElementSibling;
-            const nextElementImg = nextElement.querySelector('img');
-            const nextElementImgSrc = nextElementImg.getAttribute('src')
+            const mainImg = document.querySelector('.js-slider__image')
+            console.log(nextElement)
 
             if(nextElement !== 'null') {
-                const mainImg = document.querySelector('.js-slider__image')
+                const nextElementImg = nextElement.querySelector('img');
+                const nextElementImgSrc = nextElementImg.getAttribute('src')
                 mainImg.setAttribute('src' , nextElementImgSrc);
+            }
+
+            else if(nextElement === 'null') {
+                const firstImgInGroupSrc = document.querySelector('.js-slider__thumbs .gallery__item:first-child img').getAttribute('src');
+                mainImg.setAttribute('src' , firstImgInGroupSrc);
             }
        }
    })
+
 }
 
 const onImagePrev = function(event) {
@@ -172,14 +179,20 @@ const onImagePrev = function(event) {
             const currentElementInThumb = el;
             const previousElement = currentElementInThumb.parentElement.previousElementSibling;
             const previousElementImg = previousElement.querySelector('img');
-            const previousElementImgSrc = previousElementImg.getAttribute('src')
+            const previousElementImgSrc = previousElementImg.getAttribute('src');
+            const mainImg = document.querySelector('.js-slider__image');
 
             if( previousElement !== 'null' && !previousElement.classList.contains('js-slider__thumbs-item--prototype') ) {
-                const mainImg = document.querySelector('.js-slider__image')
                 mainImg.setAttribute('src' , previousElementImgSrc);
+            }
+
+            else if(previousElement.classList.contains('js-slider__thumbs-item--prototype')) {
+                const lastImgInGroupSrc = document.querySelector('.js-slider__thumbs .gallery__item:last-child img').getAttribute('src');
+                mainImg.setAttribute('src' , lastImgInGroupSrc);
             }
        }
    })
+
 }
 
 const onClose = function(event) {
@@ -199,3 +212,5 @@ const onClose = function(event) {
         }
     } )
 }
+
+
