@@ -104,12 +104,14 @@ const onImageClick = function(event, sliderRootElement, imagesSelector) {
     sliderRootElement.querySelector('img').setAttribute('src' , src);
 
     const groupName = event.target.dataset.sliderGroupName;
-    const identicalGroupName = document.querySelectorAll( imagesSelector + '[data-slider-group-name=' + groupName +']' );
+
+    const identicalGroupName = document.querySelectorAll(imagesSelector + '[data-slider-group-name=' + groupName +']');
+
 
     const sliderThumb = document.querySelector('.js-slider__thumbs');
 
     for(let i=0; i<identicalGroupName.length; i++) {
-        sliderThumb.appendChild(identicalGroupName[i]);
+        sliderThumb.appendChild(identicalGroupName[i].cloneNode(true));
     }
 
     sliderRootElement.querySelector('img').classList.add('js-slider__thumbs-image--current');
@@ -187,9 +189,9 @@ const onClose = function(event) {
     // 2. należy usunać wszystkie dzieci dla [.js-slider__thumbs] pomijając [.js-slider__thumbs-item--prototype]
 
     document.querySelector('.js-slider--active').classList.remove('js-slider--active');
+
     const children = document.querySelector('.js-slider__thumbs').children;
     const arr = Array.from(children);
-    console.log(children);
 
     arr.forEach( function(el) {
         if( !el.classList.contains('js-slider__thumbs-item--prototype') ) {
