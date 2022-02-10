@@ -1,104 +1,52 @@
-> ⭐ ***README** to coś więcej niż opis. Poprzez nie **pokazujesz swoje mocne strony** – swoją dokładność, sposób myślenia i podejście do rozwiązywania problemów. Niech Twoje README pokaże, że masz **świetne predyspozycje do rozwoju!***
-> 
-> 🎁 *Zacznij od razu. Skorzystaj z **[szablonu README i wskazówek](https://github.com/devmentor-pl/readme-template)**.* 
+# JavaScript Slider - Events
 
-&nbsp;
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Links](#links)
+  - [How it works](#how-it-works)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I Learned](#what-i-learned)
+- [Author](#author)
+- [Special thanks](#special-thanks)
 
+## Overview
 
+![](./assets/img/Animation.gif)
 
-# JavaScript: Zdarzenia
+### The challenge
 
-Otrzymaliśmy zadanie, aby utworzyć pokaz slajdów (galeria), który będzie uruchamiany po klinięciu w element `<figure>`, który zawiera element `<img>`. 
+This project was created to develop and improve my skills in JavaScript Events.
+The task was to create a slider with an image gallery using Javascript and Events (including Customs Events).
 
-Klient ma już gotową część kodu HTML, CSS oraz JS.
-Prosi nas, abyśmy HTML-a i CSS-a nie zmieniali, a w JavaScrip-cie trzymali się istniejącej już konwencji.
+### Links
 
-Element, w który będziemy klikać wygląda następująco:
+### How it works
 
-```html
-<figure class="gallery__item gallery__item--pos1">
-    <img src="./assets/img/1.jpg" alt="1" class="gallery__image">
-    <figcaption class="gallery__caption">źródło: unsplash.com</figcaption>
-</figure>
-```
+The images are randomly grouped into two groups each time the page is reloaded.
+After clicking on the selected image in gallery, a slide show is displayed, below the main image(selected) a collection of images from the same group is created.
+The user can switch between the next / previous photo by clicking the selected arrow.
+Hovering the mouse over the selected arrow stops the slideshow, moving beyond the arrow resumes the slideshow.
+Clicking on the area around the main image closes the slideshow and returns to the gallery.
 
-Natomiast kod HTML, który będziemy wykorzystywać do pokazów slajdów prezentuje sie w ten sposób:
+## My Process
 
-```html
-<section class="js-slider">
-        <header class="js-slider__zoom">
-            <span class="js-slider__nav js-slider__nav--prev">&lt;</span>
-            <span class="js-slider__nav js-slider__nav--next">&gt;</span>
-            <figure class="js-slider__wrapper">
-                <img class="js-slider__image" src="./assets/img/6.jpg" alt="1">
-                <figcaption class="js-slider__caption">źródło: unsplash.com</figcaption>
-            </figure>
-        </header>
-        <footer class="js-slider__thumbs">
-            <figure class="js-slider__thumbs-item js-slider__thumbs-item--prototype">
-                <img class="js-slider__thumbs-image">
-            </figure>
-        </footer>
-    </section>
-```
+### Built with
 
-* **.js-slider__zoom** - zawierać ma aktualnie prezentowane zdjęcie
-* **.js-slider__thumbs** - zawierać będzie listę zdjęć o tej samej nazwie grupy, co kliknięte zdjęcie
+- HTML
+- CSS
+- JavaScript
 
-> Nazwa grupy jest przechowywana w atrybucie `data-slider-group-name` i jest generowana automatycznie przez JS, aby zasymulować zmieniający się kod HTML. 
+### What I learned
 
-Efekt po klinięciu, w któryś z obazów na stronie powinien wyglądać jak na poniższym obrazie
+Working on this project allowed me to gain knowledge about events, object events and propagation. I've also learned to create my own events.
+In the project, I also used the knowledge from previous projects, which allowed me to consolidate it even more
 
-![](./assets/img/img1.png)
+## Author
 
-## Implementacja
+- Github - [Kajetan Kisielewski](https://github.com/KajetanKisielewski)
+- LinkedIn - [Kajetan Kisielewski](https://www.linkedin.com/in/kajetan-kisielewski-157b60208/)
 
-Nasze rozwiązanie ma się opierać w głównej mierze na własnych eventach (CustomEvent), których nazwy są następujące:
+## Special thanks
 
-* **js-slider-img-click** - event, który jest uruchamiany po klinięciu w obrazek na stronie (jest to już zrobione w pliku `script.js`) i ma wyświetlić nasz pokaz slajdów
-
-* **js-slider-img-next** - event, który jest uruchamiany po klinięciu w prawą strzałkę na stronie i ma pokazać kolejny obrazek z dostępny w miniaturach o ile w ogóle stnieje.
-
-* **js-slider-img-prev** - podobnie jak wyżej tylko chodzi o lewą strzałkę
-
-* **js-slider-close** - event, który jest uruchamiany po klinięciu na wolną przestrzeń wokół prezentowanego zdjęcia czyli w element `.js-slider__zoom` (i tylko w ten element - trzeba uważasz na propagację event-ów).
-
-Do uruchomienia eventów będziemy używać napisanej już funkcji `fireCustomEvent`:
-
-```javascript
-const fireCustomEvent = function(element, name) {
-    console.log(element.className, '=>', name);
-
-    const event = new CustomEvent(name, {
-        bubbles: true,
-    });
-
-    element.dispatchEvent( event );
-}
-```
-
-Dla ułatwienia funkcja ta posiada `console.log`, która prezentuje nam informacje jaki event jest odpalany i na jakim elemencie.
-
-Zauważ również, że funkcja ta przyjmuje dwa parametry. Pierwszy to element na jakim ma być wywołany event, a drugi to jego nazwa.
-
-> Zajrzyj do pliku `./assets/js/script.js`, w którym masz opisane działania, które są niezbędne do wykonania zadania.
-
-> Zapoznaj się dokładnie ze strukturą HTML i CSS, co powinno Ci pomóc w odpowiednim zrealizowaniu wyzwania.
-
-## Dodatkowe zadania
-
-### Zadanie dodatkowe 1
-
-Możesz spróbować napisać kod, który pozwoli przełączać obrazki w nieskończoność po klinięciu w nawigację tj. jeśli nie mamy już następnego obrazka (lub poprzedniego) to wracamy do początku (lub końca).
-
-### Zadanie dodatkowe 2
-
-Tworzymy kod, który automatycznie, co zadaną ilość czasu sam przełącza obrazki.
-
-
-
-&nbsp;
-
-> ⭐ ***README** to coś więcej niż opis. Poprzez nie **pokazujesz swoje mocne strony** – swoją dokładność, sposób myślenia i podejście do rozwiązywania problemów. Niech Twoje README pokaże, że masz **świetne predyspozycje do rozwoju!***
-> 
-> 🎁 *Zacznij od razu. Skorzystaj z **[szablonu README i wskazówek](https://github.com/devmentor-pl/readme-template)**.* 
+Thanks to my [Mentor - devmentor.pl](https://devmentor.pl/) - for providing me with this task and for code review.

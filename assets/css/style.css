@@ -169,6 +169,7 @@ body {
 }
 
 .js-slider__thumbs-item {
+    width: 100%;
     display: flex;
     justify-content: center;
 }
