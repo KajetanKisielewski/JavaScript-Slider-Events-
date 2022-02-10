@@ -21,6 +21,9 @@ The task was to create a slider with an image gallery using Javascript and Event
 
 ### Links
 
+- Code: [See my code](https://github.com/KajetanKisielewski/JavaScript-Slider-Events-)
+- Live: [Check it out](https://kajetankisielewski.github.io/JavaScript-Slider-Events-/)
+
 ### How it works
 
 The images are randomly grouped into two groups each time the page is reloaded.
