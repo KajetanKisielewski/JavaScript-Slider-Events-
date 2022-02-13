@@ -1,3 +1,5 @@
+let imageInterval;
+
 const init = function() {
     const imagesList = document.querySelectorAll('.gallery__item');
     imagesList.forEach( img => {
@@ -36,7 +38,7 @@ const initEvents = function(imagesList, sliderRootElement) {
         e.stopPropagation();
     })
 
-    navNext.addEventListener('mouseenter' , imgChangerStop)
+    navNext.addEventListener('mouseenter' , imgChangerStop);
     navNext.addEventListener('mouseleave' , imgChangerStart);
 
     const navPrev = sliderRootElement.querySelector('.js-slider__nav--prev');
@@ -90,21 +92,21 @@ const onImageClick = function(event, sliderRootElement, imagesSelector) {
     const clickedImgSrc = event.target.children[0].getAttribute('src');
     sliderRootElement.querySelector('img').setAttribute('src' , clickedImgSrc);
 
-    setSliderThumb(event, imagesSelector)
-    setCurrentElement()
+    setSliderThumb(event, imagesSelector);
+    setCurrentElement();
     imgChangerStart();
 }
 
 const onImageNext = function(event) {
     const currentElement = getCurrentElement();
-    const nextElement = getNextElement(currentElement)
-    nextElement === null ? setFirstImgSrc() : setNextImgSrc(nextElement)
+    const nextElement = getNextElement(currentElement);
+    nextElement === null ? setFirstImgSrc() : setNextImgSrc(nextElement);
     setCurrentElement();
 }
 
 const onImagePrev = function(event) {
     const currentElement = getCurrentElement();
-    const prevElement = getPrevElement(currentElement)
+    const prevElement = getPrevElement(currentElement);
 
     prevElement.classList.contains('js-slider__thumbs-item--prototype') ? setLastImgSrc() : setPrevImgSrc(prevElement)
     setCurrentElement();
@@ -114,14 +116,13 @@ const onClose = function(event) {
     document.querySelector('.js-slider--active').classList.remove('js-slider--active');
 
     const sliderThumb = getSliderThumb();
-    const sliderThumbChildrenArray = Array.from(sliderThumb.children)
+    const sliderThumbChildrenArray = Array.from(sliderThumb.children);
 
     sliderThumbChildrenArray.forEach( function(el) {
         if( !el.classList.contains('js-slider__thumbs-item--prototype') ) {
             sliderThumb.removeChild(el);
         }
     })
-
     imgChangerStop();
 }
 
@@ -136,10 +137,10 @@ const setSliderThumb = function(event, imagesSelector) {
         const sliderThumbItem = sliderThumbItemPrototype.cloneNode(true);
         sliderThumbItem.classList.remove('js-slider__thumbs-item--prototype');
 
-        const imgSrc = img.firstElementChild.getAttribute('src')
+        const imgSrc = img.firstElementChild.getAttribute('src');
 
         sliderThumbItem.firstElementChild.setAttribute('src' , imgSrc);
-        sliderThumb.appendChild(sliderThumbItem)
+        sliderThumb.appendChild(sliderThumbItem);
     })
 }
 
@@ -150,75 +151,66 @@ const setCurrentElement = function() {
     sliderThumbImgList.forEach( function(el) {
 
         if( el.classList.contains('js-slider__thumbs-image--current') ) {
-            el.classList.remove('js-slider__thumbs-image--current')
+            el.classList.remove('js-slider__thumbs-image--current');
         }
         else if( el.getAttribute('src') === mainImgSrc ) {
             el.classList.add('js-slider__thumbs-image--current');
         }
     })
-
 }
 
 const getMainImgSrc = function() {
-    const mainImgSrc = getMainImg().getAttribute('src');
-    return mainImgSrc;
+    return getMainImg().getAttribute('src');
 }
 
 const getSliderThumbImgList = function() {
-    const sliderThumbImgList = getSliderThumb().querySelectorAll(`img`);
-    return sliderThumbImgList;
+    return getSliderThumb().querySelectorAll(`img`);
 }
 
 const getSliderThumb = function() {
-    return document.querySelector('.js-slider__thumbs')
+    return document.querySelector('.js-slider__thumbs');
 }
 
 const getCurrentElement = function() {
-    const currentElement = document.querySelector('.js-slider__thumbs-image--current')
-    return currentElement
+    return document.querySelector('.js-slider__thumbs-image--current');
 }
 
 const getNextElement = function(currentElement) {
-    const nextElement = currentElement.parentElement.nextElementSibling;
-    return nextElement
-};
+    return currentElement.parentElement.nextElementSibling;
+}
 
 const getPrevElement = function(currentElement) {
-    const previousElement = currentElement.parentElement.previousElementSibling;
-    return previousElement
+    return currentElement.parentElement.previousElementSibling;
 }
 
 const setFirstImgSrc = function() {
     const firstImgSrc = document.querySelector('.js-slider__thumbs-item:nth-child(2) img').getAttribute('src');
-    const mainImg = getMainImg().setAttribute('src' , firstImgSrc);
+    getMainImg().setAttribute('src' , firstImgSrc);
 }
 
 const setNextImgSrc = function(nextElement) {
     const nextImgSrc = nextElement.querySelector('img').getAttribute('src');
-    const mainImg = getMainImg().setAttribute('src' , nextImgSrc);
+    getMainImg().setAttribute('src' , nextImgSrc);
 }
 
 const setPrevImgSrc = function(prevElement) {
     const prevImgSrc = prevElement.querySelector('img').getAttribute('src');
-    const mainImg = getMainImg().setAttribute('src' , prevImgSrc);
+    getMainImg().setAttribute('src' , prevImgSrc);
 }
 
 const setLastImgSrc = function() {
     const lastImgSrc = document.querySelector('.js-slider__thumbs-item:last-child img').getAttribute('src');
-    const mainImg = getMainImg().setAttribute('src' , lastImgSrc);
+    getMainImg().setAttribute('src' , lastImgSrc);
 }
 
 const getMainImg = function() {
-    const mainImg = document.querySelector('.js-slider__image');
-    return mainImg;
+    return document.querySelector('.js-slider__image');
 }
 
-let interval;
-
 const imgChangerStart = function() {
-    interval = setInterval(onImageNext,2000);
+    imageInterval = setInterval(onImageNext,2000);
 }
 
 const imgChangerStop = function() {
-    clearInterval(interval);
+    clearInterval(imageInterval);
 }
